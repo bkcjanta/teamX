@@ -25,7 +25,7 @@ import {
         justify={'center'}
        >
             
-        <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6} >
+        <Stack spacing={5} mx={'auto'} maxW={'lg'} py={12} px={6} >
           <Stack align={'center'}>
             <Heading fontSize={'3xl'}  color={"white"}>Sign in </Heading>
           </Stack>

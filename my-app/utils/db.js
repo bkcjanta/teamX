@@ -5,7 +5,7 @@ export const connectDatabase = async () => {
   if (mongoose.connection.readyState >= 1) {
     return;
   }
-
+  mongoose.set('strictQuery', false);
   return mongoose
     .connect(MONGOURI)
     .then(() => {

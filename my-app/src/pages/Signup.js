@@ -1,38 +1,120 @@
 import React from 'react'
-
+import bg from "../assets/bg.jpg"
 import {
     Flex,
     Box,
     FormControl,
     FormLabel,
     Input,
-    InputGroup,
-    HStack,
-    InputRightElement,
+    Checkbox,
     Stack,
+    Link,
     Button,
     Heading,
     Text,
+    Image,
     useColorModeValue,
-    Link,
+    InputRightElement,
+    InputGroup,
+    useToast,
+
   } from '@chakra-ui/react';
   import { useState } from 'react';
-  import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
-  const Signup=()=>{
+import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
+  import axios from "axios";
+  const Signup=()=> {
     const [showPassword, setShowPassword] = useState(false);
-  
+    const [showPassword1, setShowPassword1] = useState(false);
+    const [fname,setFname]=useState("");
+    const [lname,setLname]=useState("");
+    const [email,setEmail]=useState("");
+    const [password,setPassword]=useState("");
+    const [confirmPassword,steConfirmPassword]=useState("");
+    const [loading,setLoading]=useState(false);
+    const toast=useToast()
+    
+    const  Signup=async ()=>{
+      // setLoading(true);
+      if(!fname || !lname || !email || !password || !confirmPassword ){
+       toast({
+        title:"All fields are requires * ",
+        status:"error",
+        position:"top-right",
+        duration: 4000,
+        isClosable:true
+       })
+      }else if(!email.includes("@") || !email.includes(".com")){
+        toast({
+          title:"Invalid Email *",
+          status:"error",
+          position:"top-right",
+          duration: 4000,
+          isClosable:true
+         })
+      }else if(password!=confirmPassword ){
+        toast({
+          title:"Password not matched * ",
+          status:"error",
+          position:"top-right",
+          duration: 4000,
+          isClosable:true
+         })
+      }else if(password.length<6 ){
+        toast({
+          title:"Password should be minimum 6 characters * ",
+          status:"error",
+          position:"top-right",
+          duration: 4000,
+          isClosable:true
+         })
+      }else{
+        const name=fname+" "+lname;
+        // setLoading(true);
+        //   const res= await fetch("api/users/signin",{
+        //   method:"POST",
+        //   mode: 'cors',
+        //   headers: {
+        //     'Content-Type': 'application/json',
+        //     // "authorization":`Barear ${token}`
+        //   },
+        //   body:JSON.stringify({name:name,email:email,password:password})
+        //  })
+
+        //  const data= await res.json();
+        //  console.log(data)     
+        axios.post("api/users/signin",{name,email,password})  
+        .then((res)=>{
+          console.log(res.data)
+        })
+        .catch((err)=>{
+          console.log(err)
+        })
+         
+        toast({
+          title:"Signup successfull",
+          status:"success",
+          position:"top-right",
+          duration: 4000,
+          isClosable:true
+         })
+      }
+
+     
+
+    }
+
     return (
-      <Box backgroundImage="url('https://img.freepik.com/free-photo/studio-background-concept-abstract-empty-light-gradient-purple-studio-room-background-product_1258-54087.jpg?w=1060&t=st=1674852903~exp=1674853503~hmac=282f2cfdf4d14d1bb2754a33d5b51d9129bbda48360b125544867604ed3813db')">
+      <Box  >
         <Flex
         minH={'100vh'}
         align={'center'}
         justify={'center'}
-        bg={useColorModeValue('gray.50', 'gray.800')}>
-        <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
+        backgroundImage="url('https://img.freepik.com/free-photo/studio-background-concept-abstract-empty-light-gradient-purple-studio-room-background-product_1258-54087.jpg?w=1060&t=st=1674852903~exp=1674853503~hmac=282f2cfdf4d14d1bb2754a33d5b51d9129bbda48360b125544867604ed3813db')"
+       >
+            
+        <Stack spacing={5} mx={'auto'} w={'sm'} py={12} px={6} >
           <Stack align={'center'}>
-            <Heading fontSize={'3xl'} textAlign={'center'}>
-              Sign up
-            </Heading>
+            <Heading fontSize={'3xl'}  color={"white"}>Sign up </Heading>
           </Stack>
           <Box
             rounded={'lg'}
@@ -40,56 +122,62 @@ import {
             boxShadow={'lg'}
             p={8}>
             <Stack spacing={4}>
-              <HStack>
-                <Box>
-                  <FormControl id="firstName" isRequired>
-                    <FormLabel>First Name</FormLabel>
-                    <Input type="text" />
-                  </FormControl>
-                </Box>
-                <Box>
-                  <FormControl id="lastName">
-                    <FormLabel>Last Name</FormLabel>
-                    <Input type="text" />
-                  </FormControl>
-                </Box>
-              </HStack>
-              <FormControl id="email" isRequired>
-                <FormLabel>Email address</FormLabel>
-                <Input type="email" />
+            <FormControl  id="fname">
+                <Input onChange={(e)=>setFname(e.target.value)} value={fname} placeholder='First name'  type="text" />
+              </FormControl>
+              <FormControl id="lname">
+                <Input onChange={(e)=>setLname(e.target.value)} value={lname} placeholder='Last name'  type="text" />
+              </FormControl>
+              <FormControl id="email">
+                <Input onChange={(e)=>setEmail(e.target.value)} value={email} placeholder='Email'  type="email" />
               </FormControl>
               <FormControl id="password" isRequired>
-                <FormLabel>Password</FormLabel>
-                <InputGroup>
-                  <Input type={showPassword ? 'text' : 'password'} />
-                  <InputRightElement h={'full'}>
-                    <Button
-                      variant={'ghost'}
-                      onClick={() =>
-                        setShowPassword((showPassword) => !showPassword)
-                      }>
-                      {showPassword ? <ViewIcon /> : <ViewOffIcon />}
-                    </Button>
-                  </InputRightElement>
-                </InputGroup>
-              </FormControl>
-              <Stack spacing={10} pt={2}>
+              <InputGroup>
+                <Input onChange={(e)=>setPassword(e.target.value)} value={password} placeholder='Password' type={showPassword ? 'text' : 'password'} />
+                <InputRightElement h={'full'}>
+                  <Button
+                    variant={'ghost'}
+                    onClick={() =>
+                      setShowPassword((showPassword) => !showPassword)
+                    }>
+                    {showPassword ? <ViewIcon /> : <ViewOffIcon />}
+                  </Button>
+                </InputRightElement>
+              </InputGroup>
+            </FormControl>
+            <FormControl id="password1" isRequired>
+              <InputGroup>
+                <Input onChange={(e)=>steConfirmPassword(e.target.value)} value={confirmPassword} placeholder='Confirm Password' type={showPassword1 ? 'text' : 'password'} />
+                <InputRightElement h={'full'}>
+                  <Button
+                    variant={'ghost'}
+                    onClick={() =>
+                      setShowPassword1((showPassword1) => !showPassword1)
+                    }>
+                    {showPassword1 ? <ViewIcon /> : <ViewOffIcon />}
+                  </Button>
+                </InputRightElement>
+              </InputGroup>
+            </FormControl>
+              <Stack spacing={10}>
+                
                 <Button
-                  loadingText="Submitting"
-                  size="lg"
+                onClick={Signup}
+                  isLoading={loading}
                   bg={'blue.400'}
                   color={'white'}
                   _hover={{
                     bg: 'blue.500',
                   }}>
-                  Sign up
+                  Sign in
                 </Button>
+                
               </Stack>
-              <Stack pt={6}>
-                <Text align={'center'}>
-                  Already a user? <Link color={'blue.400'}>Login</Link>
-                </Text>
-              </Stack>
+              <Stack pt={0}>
+              <Text align={'center'}>
+                Already a user? <Link to="/api/Login" color={'blue.400'}>Login</Link>
+              </Text>
+            </Stack>
             </Stack>
           </Box>
         </Stack>
