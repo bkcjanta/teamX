@@ -32,11 +32,13 @@ const handler = async (req, res) => {
   try {
     let encrpitedPassword = await passBcrypt(password);
     newUser = await User.create({ name, email, password: encrpitedPassword });
-    return res.status(400).json({ success: false, data: newUser });
+    return res
+      .status(201)
+      .json({ success: true, data: "You are succesfully signin." });
   } catch (err) {
     return res
       .status(400)
-      .json({ success: true, message: "Something went wrong" });
+      .json({ success: false, message: "Something went wrong" });
   }
 };
 export default handler;

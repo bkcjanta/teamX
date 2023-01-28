@@ -2,9 +2,8 @@
 hackathon online education
 
 
-1. npx create-next-app@latest --typescript
+1. npx create-next-app@latest
 2.npm run dev to start the app.
-3.
 
 
 client-
