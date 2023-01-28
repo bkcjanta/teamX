@@ -9,6 +9,8 @@ const userSchema = new mongoose.Schema({
     default: "user",
   },
   password: { type: String },
+  purchase: { type: Boolean, default: false },
+  test_series: [],
 });
 
 const User = mongoose.models.User || mongoose.model("User", userSchema);

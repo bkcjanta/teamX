@@ -38,7 +38,7 @@ const handler = async (req, res) => {
     if (!verifyPaaword) {
       return res
         .status(400)
-        .json({ success: true, message: "Email or Password is wrong" });
+        .json({ success: false, message: "Email or Password is wrong" });
     }
 
     let token = signToken(user._id);
@@ -51,7 +51,7 @@ const handler = async (req, res) => {
     user.role = undefined;
     user.password = undefined;
 
-    return res.status(400).json({ success: false, data: user, token });
+    return res.status(400).json({ success: true, data: user, token });
   } catch (err) {
     return res
       .status(400)
