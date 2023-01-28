@@ -8,7 +8,7 @@ import {
     useDisclosure,
     Button
   } from '@chakra-ui/react'
-  import React, { useState } from 'react'
+  import React, { useEffect, useState } from 'react'
   import {
     CloseIcon,HamburgerIcon
 
@@ -24,15 +24,15 @@ export default function Sidebar() {
 
     const openButton=()=>{
         onOpen()
-        setMenu(true)
+        setMenu(!menu)
     }
-    
+
     return (
       <>
         <Button color='blue' onClick={openButton}>
-          {menu?<HamburgerIcon />:<CloseIcon />}
+          {menu?<CloseIcon />:<HamburgerIcon />}
         </Button>
-        <Drawer placement={placement} onClose={onClose} isOpen={isOpen}>
+        <Drawer placement={placement} onClose={()=>(onClose(),setMenu(!menu))} isOpen={isOpen}>
           <DrawerOverlay />
           <DrawerContent>
             <DrawerHeader backgroundColor={"#8C3B60"} color="white" borderBottomWidth='1px' fontSize={"1.5rem"}>Menu</DrawerHeader>

@@ -24,11 +24,13 @@ const Navbar = () => {
                 <Button variant={"none"} bg={"none"}>Home</Button>
                 <Button variant={"none"} bg="none">About</Button>
              <Menu>
-  <MenuButton variant={"none"} _focus={{background:"white"}} _hover={"none"} bg="white" as={Button} rightIcon={<ChevronDownIcon />}>
+  <MenuButton variant={"none"}  bg="white" as={Button} rightIcon={<ChevronDownIcon />}>
     Test Series
   </MenuButton>
   <MenuList>
-    <MenuItem>SSC</MenuItem>
+    <MenuItem>
+    <Link href="/testseries">SSC</Link>
+    </MenuItem>
     <MenuItem>Banking</MenuItem>
     <MenuItem>CPO</MenuItem>
     <MenuItem>Railways</MenuItem>
