@@ -24,7 +24,7 @@ const handler = async (req, res) => {
   if (existUser) {
     return res
       .status(400)
-      .json({ success: false, message: "You are already signin" });
+      .json({ success: false, message: "You are already signup" });
   }
 
   let newUser;
@@ -34,7 +34,7 @@ const handler = async (req, res) => {
     newUser = await User.create({ name, email, password: encrpitedPassword });
     return res
       .status(201)
-      .json({ success: true, data: "You are succesfully signin." });
+      .json({ success: true, message: "You are succesfully signup." });
   } catch (err) {
     return res
       .status(400)

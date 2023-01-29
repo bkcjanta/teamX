@@ -1,5 +1,7 @@
-import React from 'react'
+import React ,{useState,useEffect} from 'react'
 import bg from "../assets/bg.jpg"
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import {
     Flex,
     Box,
@@ -8,17 +10,89 @@ import {
     Input,
     Checkbox,
     Stack,
-    Link,
     Button,
     Heading,
     Text,
     Image,
     useColorModeValue,
+    InputGroup,
+    InputRightElement ,
+    useToast
   } from '@chakra-ui/react';
+import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
+import axios from "axios";
+
+  const login=()=> {
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const toast=useToast()
+    const router=useRouter()
+    const Login =() => {
+      // setLoading(true);
+      if (!email || !password ) {
+        toast({
+          title: "All fields are requires * ",
+          status: "error",
+          position: "top-right",
+          duration: 4000,
+          isClosable: true
+        })
+      } else if (!email.includes("@") || !email.includes(".com")) {
+        toast({
+          title: "Invalid Email *",
+          status: "error",
+          position: "top-right",
+          duration: 4000,
+          isClosable: true
+        })
+      } else {
+        setLoading(true);
   
-  const Login=()=> {
+        //   const res= await fetch("api/users/signin",{
+        //   method:"POST",
+        //   mode: 'cors',
+        //   headers: {
+        //     'Content-Type': 'application/json',
+        //     // "authorization":`Barear ${token}`
+        //   },
+        //   body:JSON.stringify({name:name,email:email,password:password})
+        //  })
+  
+        //  const data= await res.json();
+        //  console.log(data)     
+        axios.post("api/users/login", {email, password })
+          .then((res) => {
+            console.log(res.data)
+            toast({
+              title: res.data.message,
+              status: "success",
+              position: "top-right",
+              duration: 4000,
+              isClosable: true
+            })
+            setLoading(false);
+            setEmail("");
+            setPassword("");
+            // router.push("/")
+  
+          })
+          .catch((err) => {
+            setLoading(false);
+            console.log(err)
+            toast({
+              title: "err",
+              status: "error",
+              position: "top-right",
+              duration: 4000,
+              isClosable: true
+            })
+          })
+      }
+    }
     return (
-      <Box  backgroundImage="url('https://img.freepik.com/free-photo/studio-background-concept-abstract-empty-light-gradient-purple-studio-room-background-product_1258-54087.jpg?w=1060&t=st=1674852903~exp=1674853503~hmac=282f2cfdf4d14d1bb2754a33d5b51d9129bbda48360b125544867604ed3813db')">
+      <Box  bg={"#8C3B60"} >
         <Flex
         minH={'100vh'}
         align={'center'}
@@ -35,13 +109,24 @@ import {
             boxShadow={'lg'}
             p={8}>
             <Stack spacing={4}>
-              <FormControl id="email">
-                <FormLabel>Email address</FormLabel>
-                <Input type="email" />
+              <FormControl id="email" isRequired>
+                <FormLabel>Email ID</FormLabel>
+                <Input placeholder={"Email ID"} onChange={(e)=>setEmail(e.target.value)} value={email} type="email" />
               </FormControl>
-              <FormControl id="password">
-                <FormLabel>Password</FormLabel>
-                <Input type="password" />
+              <FormControl id="password" isRequired>
+              <FormLabel>Password</FormLabel>
+                <InputGroup>
+                  <Input onChange={(e) => setPassword(e.target.value)} value={password} placeholder='Password' type={showPassword ? 'text' : 'password'} />
+                  <InputRightElement h={'full'}>
+                    <Button
+                      variant={'ghost'}
+                      onClick={() =>
+                        setShowPassword((showPassword) => !showPassword)
+                      }>
+                      {showPassword ? <ViewIcon /> : <ViewOffIcon />}
+                    </Button>
+                  </InputRightElement>
+                </InputGroup>
               </FormControl>
               <Stack spacing={10}>
                 <Stack
@@ -49,9 +134,10 @@ import {
                   align={'start'}
                   justify={'space-between'}>
                   <Checkbox>Remember me</Checkbox>
-                  <Link color={'blue.400'}>Forgot password?</Link>
+                 <Text color={'blue'}> <Link href={"/reset"} >Forgot password?</Link></Text>
                 </Stack>
                 <Button
+                onClick={(Login)}
                   bg={'blue.400'}
                   color={'white'}
                   _hover={{
@@ -61,7 +147,10 @@ import {
                 </Button>
                 
               </Stack>
-              <Text textAlign={"center"}>Don't have account? <span style={{color:"blue"}}>Signup</span></Text>
+              <Text align={'center'}>
+                  Already a user? <span style={{color:"blue"}}><Link href={"/signup"} >signup</Link></span>
+                  
+                </Text>
             </Stack>
           </Box>
         </Stack>
@@ -71,4 +160,4 @@ import {
     );
   }
 
-export default Login
+export default login
