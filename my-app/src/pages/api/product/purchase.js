@@ -209,7 +209,7 @@ const handler = async (req, res) => {
 
   //find test serires in basis of tag and title
   //we can also do it from id testsereis id
-  const test = await Exam.findOne({ tag: "SSC", title: "SSC CGL 2018" });
+  const test = await Exam.findOne({ _id:req.body._id });
   console.log("test:", test);
 
   test._id = undefined;
@@ -246,4 +246,4 @@ const handler = async (req, res) => {
   });
 };
 
-export default protectWith(roleChecker(handler, "user"));
+export default protectWith(handler);

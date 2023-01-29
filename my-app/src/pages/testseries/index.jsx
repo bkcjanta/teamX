@@ -1,4 +1,4 @@
-import React from 'react'
+import React ,{useEffect,useState}from 'react'
 import styles from "./course.module.css"
 import { Button, Heading } from '@chakra-ui/react'
 import { ChevronDownIcon } from '@chakra-ui/icons'
@@ -6,6 +6,10 @@ import Slider from 'react-slick'
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { ChevronRightIcon, ChevronLeftIcon } from '@chakra-ui/icons'
+import axios from "axios";
+import {fetchData} from "../../Redux/testSlice/testSlice";
+import {useDispatch,useSelector} from "react-redux";
+import Link from 'next/link';
 import {
   Menu,
   MenuButton,
@@ -69,7 +73,10 @@ function PrevArrow(props) {
 
 
 const Courses = () => {
-
+  const dispatch=useDispatch()
+  const test=useSelector((state)=>state.test)
+  console.log(test.test)
+  const data=test.test;
   const settings = {
     infinite: true,
     dots: true,
@@ -82,6 +89,17 @@ const Courses = () => {
     nextArrow: <NextArrow />,
     prevArrow: <PrevArrow />,
   };
+  
+  useEffect(()=>{
+    axios.get(`/api/product/test`)
+    .then((res)=>{
+      //  console.log(res.data.data);
+       dispatch(fetchData(res.data.data));
+    })
+    .catch((err)=>{
+      console.log(err)
+    })
+  },[])
 
   return (
     <div style={{background:"#8C3B60"}}>
@@ -149,60 +167,30 @@ const Courses = () => {
             </div>
         
             <div className={styles.courses}>
-              <div className={styles.cards}>
+
+             {
+              data&&data.map((item,i)=><> 
+                  <div className={styles.cards}>
                 <div className={styles.courseImg}>
                   <img src="https://cdn.testbook.com/resources/productionimages/555_All_1665002340.png" alt="p" />
                 </div>
                 <div  className={styles.desc}>
-                  <div>Question</div>
-                  <div>Marks</div>
-                  <div>Timing</div>
-                  <div>Price</div>
+                
+                  <div><h3>{item.title}</h3></div>
+                  <div>Question -{item.question.length}</div>
+                  <div>Price- Rs {item.price} /-</div>
 
                 </div>
                 <div  className={styles.btn}>
-                  <Button size={"sm"}>View Details</Button>
+                  <Button size={"sm"}><Link href={`/test/${item._id}`}>View Details</Link></Button>
                   <Button size={"sm"}>Purchase</Button>
 
                 </div>
 
               </div>
+              </>)
+             }
 
-              <div className={styles.cards}>
-                <div className={styles.courseImg}>
-                  <img src="https://cdn.testbook.com/resources/productionimages/555_All_1665002340.png" alt="p" />
-                </div>
-                <div  className={styles.desc}>
-                  <div>Question</div>
-                  <div>Marks</div>
-                  <div>Timing</div>
-                  <div>Price</div>
-                </div>
-                <div  className={styles.btn}>
-                  <Button size={"sm"}>View Details</Button>
-                  <Button size={"sm"}>Purchase</Button>
-
-                </div>
-
-              </div>
-
-              <div className={styles.cards}>
-                <div className={styles.courseImg}>
-                  <img src="https://cdn.testbook.com/resources/productionimages/555_All_1665002340.png" alt="p" />
-                </div>
-                <div  className={styles.desc}>
-                  <div>Question</div>
-                  <div>Marks</div>
-                  <div>Timing</div>
-                  <div>Price</div>
-                </div>
-                <div  className={styles.btn}>
-                  <Button size={"sm"}>View Details</Button>
-                  <Button size={"sm"}>Purchase</Button>
-
-                </div>
-
-              </div>
             </div>
         </div>
     </div>

@@ -1,7 +1,18 @@
-import React from 'react'
+import React,{useEffect} from 'react'
 import styles from "./homepage.module.css"
-
+import { useSelector } from 'react-redux'
+import { useRouter } from 'next/navigation';
 const Homepage = () => {
+    const user = useSelector((state) => state.user);
+    const router=useRouter();
+    console.log("user")
+    console.log(user.token)
+
+    useEffect(()=>{
+     if(!user.token){
+        router.push("/login")
+     }
+    },[])
     return (
         <div className={styles.home_cont}>
             <div className={styles.banner_div}>

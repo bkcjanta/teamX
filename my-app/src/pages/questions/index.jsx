@@ -41,7 +41,7 @@ const questions = () => {
       <div className={styles.main}>
         <div className={styles.box}>
         <div className={styles.ques_cont}>
-          {ques.map((el) => (
+          {ques&&ques.map((el) => (
   
             <div key={el.a1} className={styles.ques_box}>
               <Heading className={styles.question}>{currentQ}. {el.q}</Heading>

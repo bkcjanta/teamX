@@ -10,9 +10,21 @@ import {
     MenuList,
     MenuItem,
   } from '@chakra-ui/react'
-
-
+import { useSelector ,useDispatch} from 'react-redux'
+import { useRouter } from 'next/navigation';
+import {logoutSuccess} from "../../Redux/userSlice/userSlice"
 const Navbar = () => {
+  const user = useSelector((state) => state.user);
+  const router=useRouter();
+  const dispatch=useDispatch();
+  console.log("user")
+  console.log(user.token)
+
+  const Logout=()=>{
+       console.log("logout")
+       dispatch(logoutSuccess())
+       router.push("/login")
+  }
   return (
     <div className={styles.nav_main}>
     <div className={styles.nav}>
@@ -41,10 +53,34 @@ const Navbar = () => {
                 <Button variant={"none"} bg="none">Blogs</Button>
             </div>
             <div>
-                <button>Cart</button>
-                <button>
-                <Link href="/login">Login</Link>
-                </button>
+                
+              {
+                user.token?
+                <div>
+                 <Menu>
+  <MenuButton variant={"none"}  bg="white" as={Button} rightIcon={<ChevronDownIcon />}>
+    Profile
+  </MenuButton>
+  <MenuList>
+    <MenuItem>Account</MenuItem>
+    <MenuItem>Email</MenuItem>
+    <MenuItem>My Test</MenuItem>
+    <MenuItem>My Course</MenuItem>
+  </MenuList>
+</Menu>
+                <Button onClick={Logout}>
+                 Logout
+                </Button>
+                </div>
+                :<div>
+                <Button>
+                <Link href="/login">login</Link>
+                </Button>
+                <Button>
+                <Link href="/login">Signup</Link>
+                </Button>
+                </div>
+              }
             </div>
         </div>
     </div>

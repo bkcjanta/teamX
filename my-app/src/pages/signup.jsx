@@ -118,11 +118,6 @@ const signup = () => {
         })
     }
   }
-  useEffect(()=>{
-    if(true){
-      router.push("/xyz")
-    }
-  },[])
 
   return (
     <Box  >

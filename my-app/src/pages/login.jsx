@@ -21,7 +21,10 @@ import {
   } from '@chakra-ui/react';
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import axios from "axios";
-
+import { useDispatch,useSelector } from 'react-redux';
+import { loginSuccess,loginFailed } from '../Redux/userSlice/userSlice';
+import Navbar from "./Home/Navbar"
+import Footer from "./Home/Footer"
   const login=()=> {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -29,6 +32,15 @@ import axios from "axios";
     const [loading, setLoading] = useState(false);
     const toast=useToast()
     const router=useRouter()
+    const dispatch=useDispatch()
+
+
+    const user = useSelector((state) => state.user);
+    // const router=useRouter();
+    console.log("user")
+    console.log(user.token)
+
+    
     const Login =() => {
       // setLoading(true);
       if (!email || !password ) {
@@ -65,6 +77,7 @@ import axios from "axios";
         axios.post("api/users/login", {email, password })
           .then((res) => {
             console.log(res.data)
+          dispatch(loginSuccess(res.data.data))
             toast({
               title: res.data.message,
               status: "success",
@@ -75,7 +88,7 @@ import axios from "axios";
             setLoading(false);
             setEmail("");
             setPassword("");
-            // router.push("/")
+            router.push("/")
   
           })
           .catch((err) => {
@@ -91,8 +104,12 @@ import axios from "axios";
           })
       }
     }
+    
+    
     return (
-      <Box  bg={"#8C3B60"} >
+      <>
+      <Navbar />
+      <Box mt={"55px"}  bg={"#8C3B60"} >
         <Flex
         minH={'100vh'}
         align={'center'}
@@ -157,6 +174,8 @@ import axios from "axios";
       </Flex>
       <Image src={bg}/>
       </Box>
+      <Footer />
+      </>
     );
   }
 

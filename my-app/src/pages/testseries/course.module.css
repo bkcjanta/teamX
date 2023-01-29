@@ -65,7 +65,7 @@
 
 
 .cards{
-    width: 300px;
+    width: auto;
     margin: auto;
     height: max-content;
     background-color: black;
