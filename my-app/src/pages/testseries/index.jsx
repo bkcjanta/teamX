@@ -99,7 +99,7 @@ const Courses = () => {
     .catch((err)=>{
       console.log(err)
     })
-  },[])
+  },[dispatch])
 
   return (
     <div style={{background:"#8C3B60"}}>
