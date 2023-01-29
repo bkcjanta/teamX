@@ -4,7 +4,7 @@ import Navbar from '../../Home/Navbar'
 import Footer from '../../Home/Footer'
 import AOS from "aos";
 import "aos/dist/aos.css";
-import { Button, Heading } from '@chakra-ui/react'
+import { Button, Heading ,useToast} from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import { useSelector } from 'react-redux'
 const aosinit = () => {
@@ -13,13 +13,25 @@ const aosinit = () => {
   });
 }
 
+
+
+
 const Details = () => {
   const router = useRouter()
   const { _id } = router.query
   const test = useSelector((state) => state.test);
   const data = test.test.filter((item)=>item._id===_id);
-
-
+  const toast=useToast();
+  const submit=()=>{
+    toast({
+      title: "Test purchase successfull",
+      status: "success",
+      position: "top-right",
+      duration: 4000,
+      isClosable: true
+    })
+    router.push("/")
+  }
   useEffect(() => {
     setTimeout(() => {
       aosinit()
@@ -55,7 +67,7 @@ const Details = () => {
                 <div>Marks - {item.question.length}</div>
                 <div>Timing - {item.question.length} Min</div>
                 <div>Price -Rs {item.price}/</div>
-                <Button size={"lg"} variant='solid' colorScheme={"green"} color="white">Buy Now</Button>
+                <Button onClick={submit} size={"lg"} variant='solid' colorScheme={"green"} color="white">Buy Now</Button>
               </div>
 
             </div>
